@@ -1,0 +1,6 @@
+# Replace <your_index>. Install the included sourcetype config or use spath explicitly.
+index=<your_index> sourcetype="aperture:decision" | spath | search body.kind="decision" body.decision.allow=false | table _time body.workflow body.agent body.tool body.decision.reasons{}
+
+index=<your_index> sourcetype="aperture:decision" | spath | search body.kind="outcome" body.status="unresolved" | table _time body.workflow body.decision_id
+
+index=<your_index> sourcetype="aperture:decision" | spath | search body.kind="approval" | table _time body.workflow body.approver body.expires

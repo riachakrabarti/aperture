@@ -1,0 +1,338 @@
+{
+  "status": "completed",
+  "passed": 41,
+  "total": 41,
+  "tests": [
+    {
+      "name": "Collect \u2192 archive \u2192 send blocked",
+      "control": "trajectory",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Read and archive executed; external transmission absent from independent tool ledger.",
+      "duration_ms": 25.76
+    },
+    {
+      "name": "Direct send after read blocked",
+      "control": "trajectory",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Skipping archive does not evade restricted-source policy.",
+      "duration_ms": 13.5
+    },
+    {
+      "name": "Agent handoff preserves restriction",
+      "control": "identity",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Two separately authenticated demo agents share server-owned workflow state.",
+      "duration_ms": 9.3
+    },
+    {
+      "name": "Legitimate unrestricted send succeeds",
+      "control": "regression",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Unrestricted workflow transmission succeeds.",
+      "duration_ms": 7.17
+    },
+    {
+      "name": "Approval controls actual access grant",
+      "control": "approval",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "No membership before approval; exact approved membership recorded afterward.",
+      "duration_ms": 21.36
+    },
+    {
+      "name": "Parameter substitution rejected",
+      "control": "approval",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Reader approval cannot authorize administrator role.",
+      "duration_ms": 7.0
+    },
+    {
+      "name": "Approval replay rejected",
+      "control": "approval",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Approval consumed exactly once; second action absent downstream.",
+      "duration_ms": 11.23
+    },
+    {
+      "name": "Expired approval rejected",
+      "control": "approval",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Expired approval rejected; no membership created.",
+      "duration_ms": 7.62
+    },
+    {
+      "name": "Separation of duties enforced",
+      "control": "approval",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Workflow initiator cannot approve own action.",
+      "duration_ms": 5.1
+    },
+    {
+      "name": "Concurrent spend cannot exceed cap",
+      "control": "concurrency",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Concurrent 6000-cent actions against 10000-cent cap commit only 6000 cents.",
+      "duration_ms": 10.56
+    },
+    {
+      "name": "Idempotent retries and conflicts",
+      "control": "concurrency",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Same request returns cached result; altered retry conflicts.",
+      "duration_ms": 7.31
+    },
+    {
+      "name": "Unknown tools fail closed",
+      "control": "boundary",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Unregistered tool denied by OPA before dispatch.",
+      "duration_ms": 7.43
+    },
+    {
+      "name": "Direct downstream bypass rejected",
+      "control": "boundary",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Direct HTTP tool call without proxy credential returns 401.",
+      "duration_ms": 7.32
+    },
+    {
+      "name": "Policy outage fails closed",
+      "control": "resilience",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "OPA unavailable: deny persisted; no downstream action.",
+      "duration_ms": 4.78
+    },
+    {
+      "name": "Unknown outcome quarantines workflow",
+      "control": "resilience",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Unknown outcome quarantines workflow and remains reserved; no automatic retry.",
+      "duration_ms": 9.07
+    },
+    {
+      "name": "State survives restart",
+      "control": "resilience",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Restriction survives runtime reconstruction from SQLite.",
+      "duration_ms": 14.08
+    },
+    {
+      "name": "Signed chain and checkpoint verification",
+      "control": "evidence",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Ed25519 verification accepts original and rejects tamper/truncation against checkpoint.",
+      "duration_ms": 12.74
+    },
+    {
+      "name": "Policy decisions replay exactly",
+      "control": "evidence",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Both allow and deny reproduce from recorded inputs using the same Rego policy.",
+      "duration_ms": 12.52
+    },
+    {
+      "name": "Negative control exposes broken enforcement",
+      "control": "assurance-calibration",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Assurance correctly detects unauthorized membership with intentionally disabled policy. TEST FIXTURE ONLY.",
+      "duration_ms": 7.1
+    },
+    {
+      "name": "MCP transport identity and session reset",
+      "control": "protocol",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Actual MCP HTTP handshakes: session restart/handoff preserves history; stolen session and invented workflow refused.",
+      "duration_ms": 514.54
+    },
+    {
+      "name": "Commercial: approval overrides restricted send",
+      "control": "trajectory",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Approvable trajectory rule yields to an exact approval; the override is named in the signed decision.",
+      "duration_ms": 11.43
+    },
+    {
+      "name": "Profiles are isolated per workflow",
+      "control": "profile",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Same action, two workflows: commercial allows it, federal-adjacent denies a non-allowlisted destination.",
+      "duration_ms": 9.07
+    },
+    {
+      "name": "Federal: egress allowlist is not approvable",
+      "control": "egress",
+      "profile": "federal",
+      "passed": true,
+      "evidence": "Approval satisfies the CUI rule but cannot override the egress allowlist; AC-4 and SC-7 attached as draft evidence.",
+      "duration_ms": 9.52
+    },
+    {
+      "name": "Federal: staged exfiltration cannot be approved",
+      "control": "trajectory",
+      "profile": "federal",
+      "passed": true,
+      "evidence": "Read, stage, send to an allowlisted partner: still denied; the three-step rule is non-overridable in this profile.",
+      "duration_ms": 15.12
+    },
+    {
+      "name": "Federal: approved send to allowlisted partner",
+      "control": "regression",
+      "profile": "federal",
+      "passed": true,
+      "evidence": "Approved CUI send to an allowlisted destination succeeds; AC-5 attached for the approval.",
+      "duration_ms": 11.43
+    },
+    {
+      "name": "Federal: approval lifetime capped by profile",
+      "control": "approval",
+      "profile": "federal",
+      "passed": true,
+      "evidence": "Federal profile caps approval lifetime at 300 seconds; a 900-second approval is refused.",
+      "duration_ms": 4.67
+    },
+    {
+      "name": "Trajectory rules are policy data, not code",
+      "control": "policy-as-code",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Policy input carries history, not flags. Retagging one tool in data changed enforcement with no code change, under a new policy hash.",
+      "duration_ms": 71.5
+    },
+    {
+      "name": "Malformed configuration cannot activate",
+      "control": "v0.3-regression",
+      "profile": "both",
+      "passed": true,
+      "evidence": "16 malformed/duplicate configurations rejected; startup rejects missing hard-deny field before executing OPA.",
+      "duration_ms": 5.72
+    },
+    {
+      "name": "Policy changes refuse existing ledgers",
+      "control": "v0.3-regression",
+      "profile": "both",
+      "passed": true,
+      "evidence": "Both profiles reject changed policy in pinned and legacy ledgers; unchanged policy reopens.",
+      "duration_ms": 1022.33
+    },
+    {
+      "name": "Every evidence export is authenticated and checked",
+      "control": "v0.3-regression",
+      "profile": "both",
+      "passed": true,
+      "evidence": "Both original bundles verified/replayed; 38 altered bundle variants rejected, including re-signed inconsistent reports.",
+      "duration_ms": 1014.61
+    },
+    {
+      "name": "Coverage binds complete action identity",
+      "control": "v0.3-regression",
+      "profile": "both",
+      "passed": true,
+      "evidence": "Wrong tool, workflow, arguments, execution ID and duplicate observations do not inflate coverage.",
+      "duration_ms": 510.05
+    },
+    {
+      "name": "Shared resilience checks: commercial",
+      "control": "v0.3-regression",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Concurrent budget, expired approval, restart with agent handoff and policy outage enforced.",
+      "duration_ms": 515.46
+    },
+    {
+      "name": "Process termination before_intent: commercial",
+      "control": "v0.3-regression",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Abrupt process exit tested; durable intent, quarantine and retry behavior checked against persisted tool ledger.",
+      "duration_ms": 599.37
+    },
+    {
+      "name": "Process termination before_dispatch: commercial",
+      "control": "v0.3-regression",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Abrupt process exit tested; durable intent, quarantine and retry behavior checked against persisted tool ledger.",
+      "duration_ms": 596.86
+    },
+    {
+      "name": "Process termination after_dispatch: commercial",
+      "control": "v0.3-regression",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "Abrupt process exit tested; durable intent, quarantine and retry behavior checked against persisted tool ledger.",
+      "duration_ms": 614.24
+    },
+    {
+      "name": "Shared resilience checks: federal",
+      "control": "v0.3-regression",
+      "profile": "federal",
+      "passed": true,
+      "evidence": "Concurrent budget, expired approval, restart with agent handoff and policy outage enforced.",
+      "duration_ms": 517.72
+    },
+    {
+      "name": "Process termination before_intent: federal",
+      "control": "v0.3-regression",
+      "profile": "federal",
+      "passed": true,
+      "evidence": "Abrupt process exit tested; durable intent, quarantine and retry behavior checked against persisted tool ledger.",
+      "duration_ms": 603.63
+    },
+    {
+      "name": "Process termination before_dispatch: federal",
+      "control": "v0.3-regression",
+      "profile": "federal",
+      "passed": true,
+      "evidence": "Abrupt process exit tested; durable intent, quarantine and retry behavior checked against persisted tool ledger.",
+      "duration_ms": 600.55
+    },
+    {
+      "name": "Process termination after_dispatch: federal",
+      "control": "v0.3-regression",
+      "profile": "federal",
+      "passed": true,
+      "evidence": "Abrupt process exit tested; durable intent, quarantine and retry behavior checked against persisted tool ledger.",
+      "duration_ms": 603.33
+    },
+    {
+      "name": "MCP request IDs and durable retries: commercial",
+      "control": "v0.3-regression",
+      "profile": "commercial",
+      "passed": true,
+      "evidence": "HTTP tests: session-local IDs, typed IDs, same-session retry and explicit cross-session retry key.",
+      "duration_ms": 1021.8
+    },
+    {
+      "name": "MCP request IDs and durable retries: federal",
+      "control": "v0.3-regression",
+      "profile": "federal",
+      "passed": true,
+      "evidence": "HTTP tests: session-local IDs, typed IDs, same-session retry and explicit cross-session retry key.",
+      "duration_ms": 1023.8
+    }
+  ],
+  "scope": "Isolated synthetic tools over HTTP, same OPA and runtime code. Not customer validation or universal safety proof.",
+  "finished_at": 1790174236.6415334,
+  "policy_hash": "955b772cc706ab84c08f5884de578589a543efbadfa5c60b7415ab8ad1a2ea93"
+}

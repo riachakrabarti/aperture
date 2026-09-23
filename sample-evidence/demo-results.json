@@ -1,0 +1,476 @@
+[
+  {
+    "profile": "commercial",
+    "agent": "agent-a",
+    "tool": "crm.read",
+    "result": {
+      "allow": true,
+      "controls": [],
+      "decision_id": "43a9569e-0bdb-45bd-baf0-d7ca41477555",
+      "elapsed_ms": 3.509,
+      "outcome": {
+        "execution_id": "43a9569e-0bdb-45bd-baf0-d7ca41477555",
+        "records": [
+          {
+            "classification": "restricted",
+            "id": "demo-customer"
+          }
+        ],
+        "status": "completed",
+        "synthetic": true,
+        "tool": "crm.read"
+      },
+      "overridden": [],
+      "policy_ms": 1.883,
+      "profile": "commercial",
+      "reasons": [],
+      "status": "completed"
+    }
+  },
+  {
+    "profile": "commercial",
+    "agent": "agent-a",
+    "tool": "archive.create",
+    "result": {
+      "allow": true,
+      "controls": [],
+      "decision_id": "cbc99dce-bc59-4133-a631-749c4d4f6343",
+      "elapsed_ms": 2.681,
+      "outcome": {
+        "execution_id": "cbc99dce-bc59-4133-a631-749c4d4f6343",
+        "status": "completed",
+        "synthetic": true,
+        "tool": "archive.create"
+      },
+      "overridden": [],
+      "policy_ms": 1.04,
+      "profile": "commercial",
+      "reasons": [],
+      "status": "completed"
+    }
+  },
+  {
+    "profile": "commercial",
+    "agent": "agent-b",
+    "tool": "external.send",
+    "result": {
+      "allow": false,
+      "controls": [
+        "TA0009 Collection",
+        "TA0010 Exfiltration"
+      ],
+      "decision_id": "d98a1ffc-5487-415f-b718-8a3eb3a5b0e5",
+      "elapsed_ms": 1.761,
+      "overridden": [],
+      "policy_ms": 1.425,
+      "profile": "commercial",
+      "reasons": [
+        "restricted_data_external_send",
+        "staged_exfiltration"
+      ],
+      "status": "blocked"
+    }
+  },
+  {
+    "profile": "commercial",
+    "agent": "agent-b",
+    "tool": "external.send",
+    "result": {
+      "allow": true,
+      "controls": [
+        "Approved override",
+        "TA0009 Collection",
+        "TA0010 Exfiltration"
+      ],
+      "decision_id": "ae67dc3d-f25c-4b02-9c04-46239c3cc7f0",
+      "elapsed_ms": 2.931,
+      "outcome": {
+        "execution_id": "ae67dc3d-f25c-4b02-9c04-46239c3cc7f0",
+        "status": "completed",
+        "synthetic": true,
+        "tool": "external.send"
+      },
+      "overridden": [
+        "restricted_data_external_send",
+        "staged_exfiltration"
+      ],
+      "policy_ms": 1.495,
+      "profile": "commercial",
+      "reasons": [],
+      "status": "completed"
+    }
+  },
+  {
+    "profile": "commercial",
+    "agent": "agent-b",
+    "tool": "access.grant",
+    "result": {
+      "allow": false,
+      "controls": [
+        "TA0004 Privilege Escalation"
+      ],
+      "decision_id": "040432a7-f557-4ee5-807b-8a4d5478ba68",
+      "elapsed_ms": 1.724,
+      "overridden": [],
+      "policy_ms": 1.405,
+      "profile": "commercial",
+      "reasons": [
+        "exact_approval_required"
+      ],
+      "status": "blocked"
+    }
+  },
+  {
+    "profile": "commercial",
+    "agent": "agent-b",
+    "tool": "access.grant",
+    "result": {
+      "allow": true,
+      "controls": [
+        "Approved override",
+        "TA0004 Privilege Escalation"
+      ],
+      "decision_id": "3988b8b2-0840-4c1c-8a3f-0bb48b25d37d",
+      "elapsed_ms": 2.334,
+      "outcome": {
+        "execution_id": "3988b8b2-0840-4c1c-8a3f-0bb48b25d37d",
+        "membership": {
+          "role": "reader",
+          "subject": "employee-demo"
+        },
+        "status": "completed",
+        "synthetic": true,
+        "tool": "access.grant"
+      },
+      "overridden": [
+        "exact_approval_required"
+      ],
+      "policy_ms": 0.939,
+      "profile": "commercial",
+      "reasons": [],
+      "status": "completed"
+    }
+  },
+  {
+    "profile": "commercial",
+    "agent": "agent-b",
+    "tool": "access.grant",
+    "result": {
+      "allow": false,
+      "controls": [
+        "TA0004 Privilege Escalation"
+      ],
+      "decision_id": "cf88bead-9671-4b1d-a618-4f6549ff3495",
+      "elapsed_ms": 2.618,
+      "overridden": [],
+      "policy_ms": 2.334,
+      "profile": "commercial",
+      "reasons": [
+        "exact_approval_required"
+      ],
+      "status": "blocked"
+    }
+  },
+  {
+    "profile": "commercial",
+    "agent": "agent-a",
+    "tool": "spend.commit",
+    "result": {
+      "allow": true,
+      "controls": [],
+      "decision_id": "06404f00-1514-4279-be9f-8e6aace76d4c",
+      "elapsed_ms": 2.404,
+      "outcome": {
+        "committed_cents": 6000,
+        "execution_id": "06404f00-1514-4279-be9f-8e6aace76d4c",
+        "status": "completed",
+        "synthetic": true,
+        "tool": "spend.commit"
+      },
+      "overridden": [],
+      "policy_ms": 1.157,
+      "profile": "commercial",
+      "reasons": [],
+      "status": "completed"
+    }
+  },
+  {
+    "profile": "commercial",
+    "agent": "agent-b",
+    "tool": "spend.commit",
+    "result": {
+      "allow": false,
+      "controls": [
+        "TA0040 Impact"
+      ],
+      "decision_id": "02c29305-2437-40d0-b368-c0bc0257304e",
+      "elapsed_ms": 1.446,
+      "overridden": [],
+      "policy_ms": 1.093,
+      "profile": "commercial",
+      "reasons": [
+        "cumulative_budget_exceeded"
+      ],
+      "status": "blocked"
+    }
+  },
+  {
+    "profile": "federal",
+    "agent": "agent-a",
+    "tool": "crm.read",
+    "result": {
+      "allow": true,
+      "controls": [
+        "AC-3",
+        "AU-10",
+        "AU-12",
+        "AU-2",
+        "AU-3"
+      ],
+      "decision_id": "76257ec6-9e7e-48e7-b219-deb0ef908247",
+      "elapsed_ms": 2.379,
+      "outcome": {
+        "execution_id": "76257ec6-9e7e-48e7-b219-deb0ef908247",
+        "records": [
+          {
+            "classification": "restricted",
+            "id": "demo-customer"
+          }
+        ],
+        "status": "completed",
+        "synthetic": true,
+        "tool": "crm.read"
+      },
+      "overridden": [],
+      "policy_ms": 1.11,
+      "profile": "federal",
+      "reasons": [],
+      "status": "completed"
+    }
+  },
+  {
+    "profile": "federal",
+    "agent": "agent-a",
+    "tool": "archive.create",
+    "result": {
+      "allow": true,
+      "controls": [
+        "AC-3",
+        "AU-10",
+        "AU-12",
+        "AU-2",
+        "AU-3"
+      ],
+      "decision_id": "a445762f-10a8-4a7e-b1e9-eba7b99ffcef",
+      "elapsed_ms": 3.5,
+      "outcome": {
+        "execution_id": "a445762f-10a8-4a7e-b1e9-eba7b99ffcef",
+        "status": "completed",
+        "synthetic": true,
+        "tool": "archive.create"
+      },
+      "overridden": [],
+      "policy_ms": 1.979,
+      "profile": "federal",
+      "reasons": [],
+      "status": "completed"
+    }
+  },
+  {
+    "profile": "federal",
+    "agent": "agent-b",
+    "tool": "external.send",
+    "result": {
+      "allow": false,
+      "controls": [
+        "AC-3",
+        "AC-4",
+        "AU-10",
+        "AU-12",
+        "AU-2",
+        "AU-3",
+        "SI-4"
+      ],
+      "decision_id": "eb3b4336-6e6d-4b8c-8c12-fda5d383feec",
+      "elapsed_ms": 1.546,
+      "overridden": [],
+      "policy_ms": 1.238,
+      "profile": "federal",
+      "reasons": [
+        "cui_external_send",
+        "staged_exfiltration"
+      ],
+      "status": "blocked"
+    }
+  },
+  {
+    "profile": "federal",
+    "agent": "agent-b",
+    "tool": "external.send",
+    "result": {
+      "allow": false,
+      "controls": [
+        "AC-3",
+        "AC-4",
+        "AC-5",
+        "AU-10",
+        "AU-12",
+        "AU-2",
+        "AU-3",
+        "SI-4"
+      ],
+      "decision_id": "17440e79-cd4a-40c5-9fa6-33c9aea6f2e7",
+      "elapsed_ms": 1.674,
+      "overridden": [
+        "cui_external_send"
+      ],
+      "policy_ms": 1.482,
+      "profile": "federal",
+      "reasons": [
+        "staged_exfiltration"
+      ],
+      "status": "blocked"
+    }
+  },
+  {
+    "profile": "federal",
+    "agent": "agent-b",
+    "tool": "access.grant",
+    "result": {
+      "allow": false,
+      "controls": [
+        "AC-3",
+        "AC-5",
+        "AC-6",
+        "AU-10",
+        "AU-12",
+        "AU-2",
+        "AU-3"
+      ],
+      "decision_id": "88a2ed93-2b74-4a4b-a8ba-9395d0419bb5",
+      "elapsed_ms": 1.305,
+      "overridden": [],
+      "policy_ms": 0.848,
+      "profile": "federal",
+      "reasons": [
+        "exact_approval_required"
+      ],
+      "status": "blocked"
+    }
+  },
+  {
+    "profile": "federal",
+    "agent": "agent-b",
+    "tool": "access.grant",
+    "result": {
+      "allow": true,
+      "controls": [
+        "AC-3",
+        "AC-5",
+        "AC-6",
+        "AU-10",
+        "AU-12",
+        "AU-2",
+        "AU-3"
+      ],
+      "decision_id": "8f58bd3b-c9c7-403e-a411-e17e0a7c25dc",
+      "elapsed_ms": 2.627,
+      "outcome": {
+        "execution_id": "8f58bd3b-c9c7-403e-a411-e17e0a7c25dc",
+        "membership": {
+          "role": "reader",
+          "subject": "employee-demo"
+        },
+        "status": "completed",
+        "synthetic": true,
+        "tool": "access.grant"
+      },
+      "overridden": [
+        "exact_approval_required"
+      ],
+      "policy_ms": 1.099,
+      "profile": "federal",
+      "reasons": [],
+      "status": "completed"
+    }
+  },
+  {
+    "profile": "federal",
+    "agent": "agent-b",
+    "tool": "access.grant",
+    "result": {
+      "allow": false,
+      "controls": [
+        "AC-3",
+        "AC-5",
+        "AC-6",
+        "AU-10",
+        "AU-12",
+        "AU-2",
+        "AU-3"
+      ],
+      "decision_id": "175c3678-29b5-4467-9f49-e978037da4dc",
+      "elapsed_ms": 1.782,
+      "overridden": [],
+      "policy_ms": 1.035,
+      "profile": "federal",
+      "reasons": [
+        "exact_approval_required"
+      ],
+      "status": "blocked"
+    }
+  },
+  {
+    "profile": "federal",
+    "agent": "agent-a",
+    "tool": "spend.commit",
+    "result": {
+      "allow": true,
+      "controls": [
+        "AC-3",
+        "AU-10",
+        "AU-12",
+        "AU-2",
+        "AU-3"
+      ],
+      "decision_id": "d70e158f-a910-4f48-ab17-0a0d0e3cc04f",
+      "elapsed_ms": 2.868,
+      "outcome": {
+        "committed_cents": 6000,
+        "execution_id": "d70e158f-a910-4f48-ab17-0a0d0e3cc04f",
+        "status": "completed",
+        "synthetic": true,
+        "tool": "spend.commit"
+      },
+      "overridden": [],
+      "policy_ms": 1.177,
+      "profile": "federal",
+      "reasons": [],
+      "status": "completed"
+    }
+  },
+  {
+    "profile": "federal",
+    "agent": "agent-b",
+    "tool": "spend.commit",
+    "result": {
+      "allow": false,
+      "controls": [
+        "AC-3",
+        "AU-10",
+        "AU-12",
+        "AU-2",
+        "AU-3"
+      ],
+      "decision_id": "c07fd50d-0eef-4bc5-8cab-e0c8b4c754c2",
+      "elapsed_ms": 1.668,
+      "overridden": [],
+      "policy_ms": 1.416,
+      "profile": "federal",
+      "reasons": [
+        "cumulative_budget_exceeded"
+      ],
+      "status": "blocked"
+    }
+  }
+]

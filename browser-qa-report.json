@@ -1,0 +1,65 @@
+{
+  "checks": [
+    {
+      "name": "commercial: profile switch applied",
+      "passed": true
+    },
+    {
+      "name": "commercial: restricted read allowed",
+      "passed": true
+    },
+    {
+      "name": "commercial: send after read denied",
+      "passed": true
+    },
+    {
+      "name": "commercial: approved send allowed",
+      "passed": true
+    },
+    {
+      "name": "federal: profile switch applied",
+      "passed": true
+    },
+    {
+      "name": "federal: restricted read allowed",
+      "passed": true
+    },
+    {
+      "name": "federal: send after read denied",
+      "passed": true
+    },
+    {
+      "name": "federal: approved send allowed to allowlisted partner",
+      "passed": true
+    },
+    {
+      "name": "federal: AC-4 evidence attached to denial",
+      "passed": true
+    },
+    {
+      "name": "federal: non-allowlisted egress denied",
+      "passed": true
+    },
+    {
+      "name": "assurance suite all passed in UI",
+      "passed": true
+    },
+    {
+      "name": "evidence chain verifies in UI",
+      "passed": true
+    },
+    {
+      "name": "federal control table populated",
+      "passed": true
+    },
+    {
+      "name": "mobile: no document-level horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "no page JavaScript errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}
