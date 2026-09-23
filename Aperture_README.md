@@ -244,7 +244,7 @@ Open the same browser URL and credentials file described above. Windows startup 
 
 ## 7. Vercel: what is and is not supported
 
-**The complete v0.3 package is not Vercel-ready.** There is no verified upload-and-deploy command for this archive.
+**The complete v0.3 package is not Vercel-ready.** The repository deploys only a static showcase to Vercel: `vercel.json` sets the output directory to `site/` with no framework or build step, and `.vercelignore` uploads nothing but `site/` and `vercel.json`, so Vercel does not treat the project as a Python app. When the screenshots or `sample-evidence/` change, copy the updated files into `site/img/` and `site/evidence/`.
 
 Vercel's Python runtime runs supported applications as Functions. Its Functions filesystem is read-only except for temporary scratch space. Aperture currently needs durable local SQLite storage, a signing key, a continuously running application process, and a local OPA service. Moving the SQLite database into temporary storage would not preserve the intended durability guarantees.
 

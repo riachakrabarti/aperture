@@ -1,0 +1,15 @@
+{
+  "bundle_integrity": "verified",
+  "event_chain": {
+    "valid": true,
+    "events": 33,
+    "head": "c2afb17e0eeae22eae5ac3123e7bf9670070f7cd10712b3f77db3351f145ea4a"
+  },
+  "derived_exports": "consistent",
+  "external_checkpoint": "verified",
+  "policy_replay": "verified",
+  "replayed_decisions": 18,
+  "nonreplayable_engine_failures": 0,
+  "tools_executed": 0,
+  "observation_scope": "Signed synthetic observations only; external completeness and independent source authenticity are not established"
+}

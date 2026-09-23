@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aperture | Runtime control for AI agents</title>
+<meta name="description" content="Aperture checks every AI agent tool call against policy and the workflow's history, then produces signed, replayable evidence.">
+<link rel="stylesheet" href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/">◈ <span>aperture</span></a>
+  <nav><a href="#how">How it works</a><a href="#profiles">Profiles</a><a href="#assurance">Assurance</a><a href="#evidence">Evidence</a><a href="#run">Run it</a></nav>
+  <span class="tag">v0.3 <b>LOCAL PILOT</b></span>
+</header>
+
+<main>
+<section class="hero">
+  <div class="eyebrow">RUNTIME CONTROL + ASSURANCE FOR AI AGENTS</div>
+  <h1>Every agent action gets a decision.<br>Every decision leaves evidence.</h1>
+  <p class="lead">Aperture sits between AI agents and the tools they call. It checks each proposed action against policy <em>and</em> everything that already happened in the same workflow, blocks or requires approval for risky sequences, and records a signed, replayable trail an auditor can verify on their own.</p>
+  <div class="boundary"><strong>Showcase page</strong><span>This site is a static overview. The live console runs locally: it starts an OPA policy engine, keeps state in SQLite and binds to loopback only, so it is not hosted here. See <a href="#run">Run it</a>.</span></div>
+  <section class="metrics">
+    <article><span>ASSURANCE CHECKS</span><strong>41/41</strong><small>Passed on this build</small></article>
+    <article><span>TAMPER VARIANTS</span><strong>38</strong><small>Rejected by the verifier</small></article>
+    <article><span>SIGNED EVENTS</span><strong>33</strong><small>In the sample evidence chain</small></article>
+    <article><span>DECISIONS REPLAYED</span><strong>18</strong><small>Reproduced offline under OPA</small></article>
+  </section>
+</section>
+
+<section id="how">
+  <h2 class="section">The problem</h2>
+  <p>Agents are being given real tools: CRM reads, file archives, outbound email, access grants, payments. Each call can look harmless on its own. The damage is in the sequence: read a restricted customer record, zip it, send it to an outside address. Per-call permission checks miss that, and a second agent picking up the task can launder it. Security and compliance teams also need proof of what was allowed and why, not just logs.</p>
+
+  <h2 class="section">How Aperture works</h2>
+  <div class="steps">
+    <article class="panel"><div class="num">01</div><h3>Gateway</h3><p>Agents connect over MCP (Model Context Protocol) to Aperture instead of directly to tools. Each agent authenticates and is bound to an operator-created workflow with a budget.</p></article>
+    <article class="panel"><div class="num">02</div><h3>Policy with memory</h3><p>Every proposed call goes to Open Policy Agent together with the workflow's recorded history. Rules match tagged trajectories such as <code>source:restricted → effect:stage → sink:external</code>.</p></article>
+    <article class="panel"><div class="num">03</div><h3>Exact approvals</h3><p>Some rules can be lifted by a separate reviewer. The approval is bound to the exact tool and arguments, expires in minutes and works once. Hard blocks and spend caps cannot be approved away.</p></article>
+    <article class="panel"><div class="num">04</div><h3>Signed evidence</h3><p>Intent is written durably before dispatch. Decisions, inputs and downstream observations form an Ed25519-signed hash chain that exports as a bundle anyone can verify and replay.</p></article>
+  </div>
+  <figure class="shot"><a href="/img/runtime-commercial-preview.png"><img src="/img/runtime-commercial-preview.png" alt="Runtime control dashboard showing workflow creation, a denied external send and the decision timeline" loading="lazy"></a><figcaption>Runtime control: a workflow reads restricted CRM data, and a second agent's external send is denied. Open the full screenshot.</figcaption></figure>
+</section>
+
+<section id="profiles">
+  <h2 class="section">One engine, two policy profiles</h2>
+  <p>Rules are data in <code>policies/aperture_data.json</code>, not code. A profile is fixed to a workflow when the workflow is created, so a decision always replays under the rules it was made with.</p>
+  <div class="table-wrap panel"><table>
+    <thead><tr><th></th><th>Commercial</th><th>Federal-adjacent</th></tr></thead>
+    <tbody>
+      <tr><td>Restricted read, then external send</td><td>Needs exact approval</td><td>Needs approval, and only to an allowlisted destination</td></tr>
+      <tr><td>Read, stage, send</td><td>Needs exact approval</td><td><span class="hard">Hard block</span>, approval cannot override</td></tr>
+      <tr><td>Egress allowlist</td><td>None</td><td><code>partner.example</code></td></tr>
+      <tr><td>Maximum approval lifetime</td><td>15 minutes</td><td>5 minutes</td></tr>
+      <tr><td>Evidence mapping</td><td>SIEM triage categories (MITRE ATT&amp;CK tactics)</td><td>NIST SP 800-53 Rev. 5 controls (draft, not assessor-reviewed)</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="shot"><a href="/img/runtime-federal-preview.png"><img src="/img/runtime-federal-preview.png" alt="Runtime control dashboard in the Federal-adjacent profile" loading="lazy"></a><figcaption>The same console in the Federal-adjacent profile.</figcaption></figure>
+</section>
+
+<section id="assurance">
+  <h2 class="section">Assurance: test the control, then check the effect</h2>
+  <p>The assurance suite runs the real gateway and policy against isolated fixtures and inspects the downstream tool ledger to confirm what actually happened. It includes a deliberately broken policy as a negative control, tampering, replay, concurrency and abrupt process kills.</p>
+  <div id="tests" class="test-list"><p>Loading the captured report… <a href="/evidence/assurance-report.json">view it as JSON</a>.</p></div>
+</section>
+
+<section id="evidence">
+  <h2 class="section">Evidence you can verify yourself</h2>
+  <div class="columns">
+    <article class="panel">
+      <div class="eyebrow">SAMPLE BUNDLE</div>
+      <h3>Synthetic demo evidence</h3>
+      <p>Produced by the scripted two-client demo across both profiles. Verify it with <code>verify_bundle.py</code> from the repository.</p>
+      <ul class="files">
+        <li><a href="/evidence/evidence.zip" download>evidence.zip</a> signed bundle</li>
+        <li><a href="/evidence/trusted-public-key.txt">trusted-public-key.txt</a></li>
+        <li><a href="/evidence/checkpoint.json">checkpoint.json</a></li>
+        <li><a href="/evidence/verification-result.txt">verification-result.txt</a></li>
+      </ul>
+    </article>
+    <article class="panel">
+      <div class="eyebrow">VERIFIER OUTPUT</div>
+      <pre class="result">{
+  "bundle_integrity": "verified",
+  "event_chain": { "valid": true, "events": 33 },
+  "derived_exports": "consistent",
+  "external_checkpoint": "verified",
+  "policy_replay": "verified",
+  "replayed_decisions": 18
+}</pre>
+    </article>
+  </div>
+  <figure class="shot"><a href="/img/evidence-federal-preview.png"><img src="/img/evidence-federal-preview.png" alt="Evidence and replay screen with the draft NIST 800-53 control evidence table and the active Rego policy" loading="lazy"></a><figcaption>Evidence and replay: signed chain verification, draft NIST 800-53 control evidence and the policy as code.</figcaption></figure>
+</section>
+
+<section id="run">
+  <h2 class="section">Run the live console</h2>
+  <p>Requires Python 3.10+ and OPA 1.0.1 (the setup script fetches the pinned, checksum-verified release).</p>
+  <pre class="code">python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+python -m pip install -r requirements.txt
+python setup.py
+python aperture.py        # open http://127.0.0.1:8080</pre>
+  <p>Paste the <code>operator</code> token from <code>data/credentials.json</code> into the dashboard. Run the tests on their own with <code>python assurance.py</code>.</p>
+</section>
+
+<section>
+  <h2 class="section">Scope, stated plainly</h2>
+  <ul class="notes">
+    <li>A tested local engineering pilot. Tools, records and identities are synthetic; no real CRM data is read and nothing is sent externally.</li>
+    <li>No production-readiness, latency, compatibility or compliance claim. The federal control mapping is a draft.</li>
+    <li>Signatures prove the captured bytes were not changed. They do not prove that every real-world action was captured.</li>
+  </ul>
+</section>
+</main>
+<footer>APERTURE <span>Inspect the decision. Verify the outcome. Know the boundary.</span></footer>
+</body>
+</html>
