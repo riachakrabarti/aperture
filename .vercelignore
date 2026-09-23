@@ -1,0 +1,6 @@
+# Aperture's runtime is a local-only Python server (OPA subprocess, SQLite,
+# loopback binding) and cannot run as a Vercel Function. Upload only the
+# static showcase so Vercel does not detect a Python project.
+/*
+!site
+!vercel.json
