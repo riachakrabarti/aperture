@@ -1,0 +1,7 @@
+# Downloaded by setup.py; platform-specific and verified against bin/opa.sha256
+bin/opa
+bin/opa.exe
+# Local runtime state: credentials, signing key, databases
+data/
+__pycache__/
+.venv/
