@@ -246,6 +246,8 @@ Open the same browser URL and credentials file described above. Windows startup 
 
 **The complete v0.3 package is not Vercel-ready.** The repository deploys only a static showcase to Vercel: `vercel.json` sets the output directory to `site/` with no framework or build step, and `.vercelignore` uploads nothing but `site/` and `vercel.json`, so Vercel does not treat the project as a Python app. When the screenshots or `sample-evidence/` change, copy the updated files into `site/img/` and `site/evidence/`.
 
+The site includes a **browser sandbox** at `/demo/`, also embedded on the landing page. It serves the unmodified dashboard (`web/`) and answers its `/api/*` calls from `site/demo/sandbox.js`, an in-memory port of the gateway, ledger and evidence export. Decisions come from `policies/controls.rego` compiled to WebAssembly, and events are signed with an Ed25519 key generated in the browser. Demo tokens are prefilled. State resets on reload. Its assurance tab runs 19 live checks; crash recovery, MCP transport and bundle-tampering tests still need the local Python suite. Evidence bundles exported from the sandbox pass `verify_bundle.py`, including OPA replay. After changing `web/` or `policies/`, run `python setup.py` and then `python tools/build_site_demo.py`, and commit the regenerated `site/demo/`.
+
 Vercel's Python runtime runs supported applications as Functions. Its Functions filesystem is read-only except for temporary scratch space. Aperture currently needs durable local SQLite storage, a signing key, a continuously running application process, and a local OPA service. Moving the SQLite database into temporary storage would not preserve the intended durability guarantees.
 
 Official documentation checked September 23, 2026:

@@ -11,7 +11,7 @@
 <body>
 <header class="top">
   <a class="brand" href="/">◈ <span>aperture</span></a>
-  <nav><a href="#how">How it works</a><a href="#profiles">Profiles</a><a href="#assurance">Assurance</a><a href="#evidence">Evidence</a><a href="#run">Run it</a></nav>
+  <nav><a href="#sandbox">Live sandbox</a><a href="#how">How it works</a><a href="#profiles">Profiles</a><a href="#assurance">Assurance</a><a href="#evidence">Evidence</a><a href="#run">Run it</a></nav>
   <span class="tag">v0.3 <b>LOCAL PILOT</b></span>
 </header>
 
@@ -20,13 +20,26 @@
   <div class="eyebrow">RUNTIME CONTROL + ASSURANCE FOR AI AGENTS</div>
   <h1>Every agent action gets a decision.<br>Every decision leaves evidence.</h1>
   <p class="lead">Aperture sits between AI agents and the tools they call. It checks each proposed action against policy <em>and</em> everything that already happened in the same workflow, blocks or requires approval for risky sequences, and records a signed, replayable trail an auditor can verify on their own.</p>
-  <div class="boundary"><strong>Showcase page</strong><span>This site is a static overview. The live console runs locally: it starts an OPA policy engine, keeps state in SQLite and binds to loopback only, so it is not hosted here. See <a href="#run">Run it</a>.</span></div>
+  <div class="boundary"><strong>Showcase page</strong><span>The <a href="#sandbox">live sandbox</a> below runs the real dashboard and the real Rego policy (compiled to WebAssembly) inside your browser, with synthetic tools and in-memory state. The full server, with durable SQLite state, MCP transport and the 41-check suite, <a href="#run">runs locally</a>.</span></div>
   <section class="metrics">
     <article><span>ASSURANCE CHECKS</span><strong>41/41</strong><small>Passed on this build</small></article>
     <article><span>TAMPER VARIANTS</span><strong>38</strong><small>Rejected by the verifier</small></article>
     <article><span>SIGNED EVENTS</span><strong>33</strong><small>In the sample evidence chain</small></article>
     <article><span>DECISIONS REPLAYED</span><strong>18</strong><small>Reproduced offline under OPA</small></article>
   </section>
+</section>
+
+<section id="sandbox">
+  <h2 class="section">Try it: live sandbox</h2>
+  <p>This is the real Aperture dashboard, wired to an in-browser copy of the gateway. Every decision is made by the unmodified <code>controls.rego</code> policy, compiled to WebAssembly, and signed with an Ed25519 key generated for your session. Nothing is sent to a server, and state resets when you reload.</p>
+  <ol class="try">
+    <li>Create a workflow. Run <code>crm.read</code>, then <code>archive.create</code>.</li>
+    <li>Switch to <code>agent-b</code> and run <code>external.send</code>. It is blocked because of the workflow's history.</li>
+    <li>Click <b>Approve selected action</b> (the reviewer token is prefilled), then run the send again. Commercial allows it; Federal-adjacent does not.</li>
+    <li>Open <b>Assurance lab</b> to run live checks, or <b>Evidence &amp; replay</b> to verify the signed chain and download the bundle.</li>
+  </ol>
+  <div class="frame"><iframe src="/demo/" title="Aperture live sandbox" loading="lazy"></iframe></div>
+  <p class="frame-link"><a href="/demo/" target="_blank" rel="noopener">Open the sandbox full screen ↗</a></p>
 </section>
 
 <section id="how">
