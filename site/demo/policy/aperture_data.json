@@ -1,0 +1,101 @@
+{
+  "aperture_config": {
+    "schema_version": 2,
+    "max_history": 500,
+    "tools": {
+      "crm.read": {
+        "description": "Read synthetic restricted CRM data",
+        "inputSchema": {"type": "object", "properties": {}, "additionalProperties": false},
+        "tags": ["source:restricted", "effect:read"]
+      },
+      "archive.create": {
+        "description": "Create a synthetic archive reference",
+        "inputSchema": {"type": "object", "properties": {}, "additionalProperties": false},
+        "tags": ["effect:stage"]
+      },
+      "external.send": {
+        "description": "Record a synthetic outbound send; no real network delivery",
+        "inputSchema": {"type": "object", "properties": {"destination": {"type": "string"}}, "required": ["destination"], "additionalProperties": false},
+        "tags": ["sink:external"],
+        "destination_argument": "destination"
+      },
+      "access.grant": {
+        "description": "Grant a synthetic role, exact approval required",
+        "inputSchema": {"type": "object", "properties": {"subject": {"type": "string"}, "role": {"type": "string"}}, "required": ["subject", "role"], "additionalProperties": false},
+        "tags": ["effect:privilege", "approval:required"]
+      },
+      "spend.commit": {
+        "description": "Commit synthetic spend in integer cents",
+        "inputSchema": {"type": "object", "properties": {"amount_cents": {"type": "integer", "minimum": 1, "maximum": 1000000}}, "required": ["amount_cents"], "additionalProperties": false},
+        "tags": ["effect:spend"],
+        "spend_argument": "amount_cents"
+      }
+    },
+    "profiles": {
+      "commercial": {
+        "label": "Commercial",
+        "summary": "Regulated-enterprise defaults. Restricted data may leave only with an exact-action approval. Evidence is organized for SIEM triage.",
+        "extra_tags": {},
+        "egress_allowlist": null,
+        "max_approval_ttl_seconds": 900,
+        "sequence_rules": [
+          {"id": "restricted_data_external_send", "pattern": ["source:restricted", "sink:external"], "overridable": true,
+           "description": "After any restricted-source read in the workflow, an external send needs an exact-action approval."},
+          {"id": "staged_exfiltration", "pattern": ["source:restricted", "effect:stage", "sink:external"], "overridable": true,
+           "description": "Read, stage, then send. Flagged separately so the SOC sees the staged pattern; approvable."}
+        ],
+        "evidence": {
+          "framework": "SIEM triage categories (MITRE ATT&CK tactic IDs, suggested)",
+          "baseline": [],
+          "by_reason": {
+            "restricted_data_external_send": ["TA0010 Exfiltration"],
+            "staged_exfiltration": ["TA0009 Collection", "TA0010 Exfiltration"],
+            "exact_approval_required": ["TA0004 Privilege Escalation"],
+            "cumulative_budget_exceeded": ["TA0040 Impact"],
+            "unknown_tool": ["Policy: unregistered tool"],
+            "workflow_unresolved": ["Operations: quarantined workflow"],
+            "policy_unavailable": ["Operations: policy engine outage"]
+          },
+          "on_approval": ["Approved override"]
+        },
+        "deployment_notes": [
+          "Customer VPC or dedicated tenant; raw prompts are not collected.",
+          "Evidence exports as Splunk HEC-shaped NDJSON."
+        ]
+      },
+      "federal": {
+        "label": "Federal-adjacent",
+        "summary": "CUI-oriented defaults. Egress is limited to an allowlist, staged exfiltration cannot be approved, approvals are shorter-lived, and evidence maps to NIST SP 800-53 control identifiers.",
+        "extra_tags": {"crm.read": ["source:cui"]},
+        "egress_allowlist": ["partner.example"],
+        "max_approval_ttl_seconds": 300,
+        "sequence_rules": [
+          {"id": "cui_external_send", "pattern": ["source:cui", "sink:external"], "overridable": true,
+           "description": "After any CUI-tagged read, an external send needs an exact-action approval, and only to an allowlisted destination."},
+          {"id": "staged_exfiltration", "pattern": ["source:cui", "effect:stage", "sink:external"], "overridable": false,
+           "description": "Read CUI, stage it, then send it. Hard block; an approval cannot override."}
+        ],
+        "evidence": {
+          "framework": "NIST SP 800-53 Rev. 5 (DRAFT mapping, not reviewed by an assessor)",
+          "baseline": ["AC-3", "AU-2", "AU-3", "AU-10", "AU-12"],
+          "by_reason": {
+            "cui_external_send": ["AC-4"],
+            "staged_exfiltration": ["AC-4", "SI-4"],
+            "egress_destination_not_allowlisted": ["AC-4", "SC-7"],
+            "exact_approval_required": ["AC-5", "AC-6"],
+            "cumulative_budget_exceeded": ["AC-3"],
+            "unknown_tool": ["CM-7"],
+            "workflow_unresolved": ["IR-4"],
+            "policy_unavailable": ["AC-3", "SI-4"]
+          },
+          "on_approval": ["AC-5"]
+        },
+        "deployment_notes": [
+          "Draft control mapping. Requires review by someone who has taken a system through an ATO.",
+          "Signatures use Ed25519 via pyca/cryptography. A FIPS 140-validated module is not established.",
+          "GovCloud or Impact Level hosting is not implemented; this runs as a local pilot."
+        ]
+      }
+    }
+  }
+}
